@@ -1,0 +1,78 @@
+Sub inhibit_Pcodes_in_ST()
+
+Dim wbk As Workbook
+Dim wbk1 As Workbook
+Dim Func_name As String
+Dim Filename As String
+Dim Path As String
+Dim dfc_name As String
+Dim dfc_name_in_file As String
+Dim Func_name_len As Integer
+Dim i As Integer
+Dim j As Integer
+Dim k As Integer
+Dim startrow As Integer
+Dim lastrow As Integer
+
+i = 2
+j = 1
+
+Sheet2.Activate
+Range("C2:C1000").Find("End").Activate
+lastvalrow = ActiveCell.Row
+
+With ThisWorkbook
+
+   Filename = Sheets("Sheet1").Range("A11").Value
+   
+End With
+
+Set wbk = Workbooks.Open(Filename)
+
+For i = 2 To lastvalrow - 1
+
+Sheet2.Activate
+
+dfc_name = Cells(i, j)
+
+i = i + 1
+
+'To read the path from cell A10
+
+
+With Sheets("Sheet2")
+    .Range(.Cells(i - 1, 3), .Cells(i, 3)).Copy
+End With
+
+
+wbk.Activate
+
+k = 1
+
+For k = 1 To 10000
+   If Cells(k, 5) = dfc_name Then
+      wbk.Activate
+      startrow = k
+      lastrow = k + 1000
+      Let copyrange = "B" & startrow & ":" & "AA" & lastrow
+      Range(copyrange).Find("Master SAE-Codes:*").Select
+      ActiveSheet.Paste
+      'wbk.Save
+      'wbk.Close
+      Else
+      End If
+      'If k = 9999 Then
+          'MsgBox "Couldn't find the dfc :" & dfc_name
+          'Exit Sub
+      'End If
+      
+Next k
+
+
+Next i
+
+
+MsgBox "Completed"
+
+
+End Sub
